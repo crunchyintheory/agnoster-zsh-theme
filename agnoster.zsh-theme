@@ -216,7 +216,7 @@ prompt_nvm() {
   local curv=$(nvm version)
   local defv=$(nvm version default)
   if [[ "$curv" != "$defv" ]]; then
-    prompt_segment red black
+    prompt_segment 120 black
     echo -n "⬡ $curv"
   fi
 }
