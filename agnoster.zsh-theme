@@ -214,8 +214,7 @@ prompt_status() {
 
 prompt_nvm() {
   local curv=$(nvm version)
-  local defv=$(nvm version default)
-  if [[ "$curv" != "$defv" ]]; then
+  if [[ "$curv" != "system" ]]; then
     prompt_segment 120 black
     echo -n "⬡ $curv"
   fi
