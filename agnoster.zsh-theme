@@ -79,7 +79,10 @@ prompt_end() {
 
 # Context: user@hostname (who am I and where am I)
 prompt_context() {
-  if [[ "$USER" != "$DEFAULT_USER" || -n "$SSH_CLIENT" ]]; then
+  if [[ "$WORKSPACE_NAME" != "" ]]; then
+    prompt_segment 214 black "$WORKSPACE_NAME"
+  fi
+  if [[ "$USER" != "$DEFAULT_USER" || ( -n "$SSH_CLIENT" && ${SSH_CLIENT:0:9} != "127.0.0.1" ) ]]; then
     prompt_segment black default "%(!.%{%F{yellow}%}.)$USER@%m"
   fi
 }
