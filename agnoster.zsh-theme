@@ -77,11 +77,18 @@ prompt_end() {
 ### Prompt components
 # Each component will draw itself, and hide itself if no information needs to be shown
 
+prompt_workspace() {
+  if [[ "$WORKSPACE_NAME" != "" ]]; then
+    if [[ "${PWD:0:${#WORKSPACE}}" == "$WORKSPACE" ]]; then
+      prompt_segment 214 black "$WORKSPACE_NAME"
+    else
+      prompt_segment 94 black "$WORKSPACE_NAME"
+    fi
+  fi
+}
+
 # Context: user@hostname (who am I and where am I)
 prompt_context() {
-  if [[ "$WORKSPACE_NAME" != "" ]]; then
-    prompt_segment 214 black "$WORKSPACE_NAME"
-  fi
   if [[ "$USER" != "$DEFAULT_USER" || ( -n "$SSH_CLIENT" && ${SSH_CLIENT:0:9} != "127.0.0.1" ) ]]; then
     prompt_segment black default "%(!.%{%F{yellow}%}.)$USER@%m"
   fi
@@ -190,7 +197,7 @@ prompt_hg() {
 
 # Dir: current working directory
 prompt_dir() {
-  prompt_segment blue black '%~'
+  prompt_segment blue black "${${PWD/$WORKSPACE/}:-/}"
 }
 
 # Virtualenv: current working virtualenv
@@ -229,6 +236,7 @@ build_prompt() {
   prompt_status
   prompt_virtualenv
   prompt_context
+  prompt_workspace
   prompt_dir
   prompt_git
   prompt_bzr
