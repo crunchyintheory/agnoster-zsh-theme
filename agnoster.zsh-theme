@@ -197,7 +197,11 @@ prompt_hg() {
 
 # Dir: current working directory
 prompt_dir() {
-  prompt_segment blue black "${${PWD/$WORKSPACE/}:-/}"
+  if [[ "$WORKSPACE" != "" ]] && echo $PWD | grep -q "^$WORKSPACE"; then
+    prompt_segment blue black "${${PWD/$WORKSPACE/}:-/}"
+  else
+    prompt_segment blue black '%~'
+  fi    
 }
 
 # Virtualenv: current working virtualenv
