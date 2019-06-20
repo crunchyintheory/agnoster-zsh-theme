@@ -219,7 +219,7 @@ prompt_virtualenv() {
 prompt_status() {
   local symbols
   symbols=()
-  [[ $RETVAL -ne 0 ]] && symbols+="%{%F{red}%}✘"
+  [[ $RETVAL -ne 0 && $? -ne 0 ]] && symbols+="%{%F{red}%}✘ $?"
   [[ $UID -eq 0 ]] && symbols+="%{%F{yellow}%}⚡"
   [[ $(jobs -l | wc -l) -gt 0 ]] && symbols+="%{%F{cyan}%}⚙"
 
@@ -231,6 +231,16 @@ prompt_nvm() {
   if [[ "$curv" != "system" ]]; then
     prompt_segment 120 black
     echo -n "⬡ $curv"
+  fi
+}
+
+prompt_docker_containers() {
+  if [[ $DISABLE_DOCKER_PROMPT != 'true' ]]; then
+    num=$(($(docker ps | wc -l)-1)) || 0
+    if [[ $num -gt 0 ]]; then
+      prompt_segment cyan black
+      echo -n "\ue0cf $num"
+    fi
   fi
 }
 
@@ -246,6 +256,7 @@ build_prompt() {
   prompt_bzr
   prompt_hg
   prompt_nvm
+  prompt_docker_containers
   prompt_end
 }
 
